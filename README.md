@@ -36,7 +36,7 @@ The command
 ```shell
 airadar
 ```
-runs the AI radar and stores the result in `airadar-results.html` in the current working directory.
+runs the AI radar and stores the result in `airadar-report.html` in the current working directory.
 
 ### Using cached articles
 If the AI radar has been run before in the current working directory, then a file
