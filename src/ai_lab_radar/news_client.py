@@ -13,7 +13,7 @@ def get_articles() -> list[dict]:
     api_key = os.environ["NEWS_API_KEY"]
 
     x = requests.get(
-        f'https://newsapi.org/v2/everything?q=AI&from=2025-02-23&sortBy=publishedAt&language=nl&apiKey={api_key}'
+        f'https://newsapi.org/v2/everything?q=AI&sortBy=publishedAt&language=nl&apiKey={api_key}'
     )
 
     return x.json()["articles"]
