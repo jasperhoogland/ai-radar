@@ -10,6 +10,7 @@ from langchain_core.language_models import BaseChatModel
 from langchain_core.prompts import ChatPromptTemplate
 
 from ai_lab_radar.news_client import get_articles
+from ai_lab_radar.to_html import render_articles
 
 default_prompt = """Write a concise summary (output format: HTML with open and closing <html></html> tags) of the 
 following articles that includes AI related developments:\\n\\n{context}"""
@@ -70,6 +71,9 @@ def main() -> None:
     # Parse arguments:
     parser = argparse.ArgumentParser()
     parser.add_argument("-c", "--cached", help="Use cached articles",  action="store_true")
+    parser.add_argument(
+        "-n", "--no-llm", help="Skip LLM call and concatenate all articles", action="store_true"
+    )
     args = parser.parse_args()
 
     # Load config file:
@@ -92,20 +96,24 @@ def main() -> None:
         articles = get_articles()
         store_articles(articles)
 
-    # Initiate model
-    model_provider = config.get("model", {}).get("provider", "openai")
-    model = config.get("model", {}).get("name", "gpt-4o-mini")
-    print(f"Model: {model} from {model_provider}")
-    llm = init_chat_model(model, model_provider=model_provider)
+    if args.no_llm:
+        print("Skip LLM call")
+        result = render_articles(articles)
+    else:
+        # Initiate model
+        model_provider = config.get("model", {}).get("provider", "openai")
+        model = config.get("model", {}).get("name", "gpt-4o-mini")
+        print(f"Model: {model} from {model_provider}")
+        llm = init_chat_model(model, model_provider=model_provider)
 
-    # Summarize articles:
-    docs = [
-        create_document(article_dict)
-        for article_dict in articles
-    ]
-    prompt = config.get("prompt", default_prompt)
-    print(f"Prompt: {prompt}")
-    result = summarize_stuff(llm, prompt, docs)
+        # Summarize articles:
+        docs = [
+            create_document(article_dict)
+            for article_dict in articles
+        ]
+        prompt = config.get("prompt", default_prompt)
+        print(f"Prompt: {prompt}")
+        result = summarize_stuff(llm, prompt, docs)
 
     with open(Path.cwd() / "airadar-report.html", "w") as fp:
         fp.write(result)

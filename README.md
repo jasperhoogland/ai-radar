@@ -70,3 +70,11 @@ prompt: "Compile a list of AI related developments and emerging technologies bas
 Write the output as HTML with <html></html> tags. \\n\\n 
 The articles are: {context}"
 ```
+
+### Skipping the LLM call
+
+The LLM call can be skipped by providing the `--no-llm` option:
+```shell
+airadar --no-llm
+```
+The result is a concatenation of all relevant AI related articles without filtering and summarization by the LLM.
