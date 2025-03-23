@@ -29,7 +29,12 @@ def create_document(article_dict: dict) -> Document:
 
 def summarize_stuff(llm: BaseChatModel, prompt: str, docs: list[Document]) -> str:
     """
+    Uses create_stuff_documents_chain to generate a summary of all articles.
 
+    :param llm: language model
+    :param prompt: prompt template
+    :param docs: list of documents
+    :return: summary string
     """
 
     # Define prompt
