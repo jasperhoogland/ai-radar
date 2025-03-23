@@ -1,0 +1,5 @@
+model:
+  provider: openai
+  name: gpt-4o-mini
+prompt: "Write a concise summary (output format: HTML with open and closing <html></html> tags) of the following 
+articles that includes AI related developments:\\n\\n{context}"
